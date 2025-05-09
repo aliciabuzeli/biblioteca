@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>Lista de Livros</h1>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<a href="/adicionar_livro">Adicionar Livro</a>
+
+{% for livro in livros %}
+<div class="livro-item">
+    <strong>{{ livro.titulo }}</strong>
+    <small>Autor: {{ livro.autor }}</small>
+    <small>Ano: {{ livro.ano }}</small>
+
+    {% if livro.devolver_ate %}
+        <small>Status: Emprestado até {{ livro.devolver_ate.strftime('%d/%m/%Y') }}</small><br>
+        <a href="/devolver_livro/{{ livro.codigo }}">Devolver</a>
+    {% else %}
+        <small>Status: Disponível</small><br>
+        <a href="/emprestar_livro/{{ livro.codigo }}">Emprestar</a>
+    {% endif %}
+
+    | <a href="/editar_livro/{{ livro.codigo }}">Editar</a>
+    | <a href="/apagar_livro/{{ livro.codigo }}">Apagar</a>
+</div>
+{% endfor %}
+
+</body>
+</html>
